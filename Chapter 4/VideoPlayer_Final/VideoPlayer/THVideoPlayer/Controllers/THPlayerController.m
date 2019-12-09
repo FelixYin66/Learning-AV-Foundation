@@ -79,6 +79,7 @@ static const NSString *PlayerItemStatusContext;
         @"commonMetadata",
         @"availableMediaCharacteristicsWithMediaSelectionOptions"
     ];
+    //PlayerItem 自动加载AVAsset中属性值（通过keys 数组）
     self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset          // 2
                            automaticallyLoadedAssetKeys:keys];
 
@@ -110,14 +111,14 @@ static const NSString *PlayerItemStatusContext;
                 // Set up time observers.                                   // 2
                 [self addPlayerItemTimeObserver];
                 [self addItemEndObserverForPlayerItem];
-                
+                //获取时长
                 CMTime duration = self.playerItem.duration;
                 
-                // Synchronize the time display                             // 3
+                // Synchronize the time display  同步播放                        // 3
                 [self.transport setCurrentTime:CMTimeGetSeconds(kCMTimeZero)
                                       duration:CMTimeGetSeconds(duration)];
                 
-                // Set the video title.
+                // Set the video title. （视频标题 视频名字）
                 [self.transport setTitle:self.asset.title];                 // 4
                 
                 [self.player play];                                         // 5
