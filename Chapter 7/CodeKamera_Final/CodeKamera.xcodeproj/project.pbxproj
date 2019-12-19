@@ -225,7 +225,7 @@
 				ORGANIZATIONNAME = "TapHarmonic, LLC";
 				TargetAttributes = {
 					074740F318A143810060A1F6 = {
-						DevelopmentTeam = GV36U76CUM;
+						DevelopmentTeam = SR52437D77;
 					};
 				};
 			};
@@ -234,6 +234,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -382,6 +383,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CodeKamera/CodeKamera-Prefix.pch";
 				INFOPLIST_FILE = "CodeKamera/CodeKamera-Info.plist";
@@ -399,6 +401,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CodeKamera/CodeKamera-Prefix.pch";
 				INFOPLIST_FILE = "CodeKamera/CodeKamera-Info.plist";

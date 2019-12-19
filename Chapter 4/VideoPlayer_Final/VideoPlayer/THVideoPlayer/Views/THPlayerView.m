@@ -33,6 +33,8 @@
 
 @implementation THPlayerView
 
+
+//直接创建 AVPlayerLayer 而不是创建一个CALayer  技巧
 + (Class)layerClass {                                                       // 2
     return [AVPlayerLayer class];
 }
@@ -48,7 +50,7 @@
 
         [[NSBundle mainBundle] loadNibNamed:@"THOverlayView"                // 5
                                       owner:self
-                                    options:nil];
+                                    options:nil];           
         
         [self addSubview:_overlayView];
     }

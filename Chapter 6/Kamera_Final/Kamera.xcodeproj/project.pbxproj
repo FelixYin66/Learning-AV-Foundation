@@ -238,12 +238,18 @@
 				CLASSPREFIX = TH;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Bob McCune";
+				TargetAttributes = {
+					C402A67F182AB0EA00CC7CB1 = {
+						DevelopmentTeam = SR52437D77;
+					};
+				};
 			};
 			buildConfigurationList = C402A67B182AB0EA00CC7CB1 /* Build configuration list for PBXProject "Kamera" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -393,6 +399,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Kamera/Kamera-Prefix.pch";
 				INFOPLIST_FILE = "Kamera/Kamera-Info.plist";
@@ -408,6 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Kamera/Kamera-Prefix.pch";
 				INFOPLIST_FILE = "Kamera/Kamera-Info.plist";

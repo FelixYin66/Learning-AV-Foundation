@@ -166,12 +166,18 @@
 				CLASSPREFIX = TH;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "TapHarmonic, LLC";
+				TargetAttributes = {
+					C49965471974D1360070C06D = {
+						DevelopmentTeam = SR52437D77;
+					};
+				};
 			};
 			buildConfigurationList = C49965431974D1360070C06D /* Build configuration list for PBXProject "THWaveformView" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -315,6 +321,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "THWaveformView/THWaveformView-Prefix.pch";
 				INFOPLIST_FILE = "THWaveformView/THWaveformView-Info.plist";
@@ -332,6 +339,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "THWaveformView/THWaveformView-Prefix.pch";
 				INFOPLIST_FILE = "THWaveformView/THWaveformView-Info.plist";

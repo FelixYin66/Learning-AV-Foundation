@@ -582,12 +582,18 @@
 				CLASSPREFIX = TH;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "TapHarmonic, LLC";
+				TargetAttributes = {
+					C4A8BDD018FB4C0D00C3EAFA = {
+						DevelopmentTeam = SR52437D77;
+					};
+				};
 			};
 			buildConfigurationList = C4A8BDCC18FB4C0D00C3EAFA /* Build configuration list for PBXProject "FifteenSeconds" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -793,6 +799,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FifteenSeconds/FifteenSeconds-Prefix.pch";
 				INFOPLIST_FILE = "FifteenSeconds/FifteenSeconds-Info.plist";
@@ -807,6 +814,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				DEVELOPMENT_TEAM = SR52437D77;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FifteenSeconds/FifteenSeconds-Prefix.pch";
 				INFOPLIST_FILE = "FifteenSeconds/FifteenSeconds-Info.plist";

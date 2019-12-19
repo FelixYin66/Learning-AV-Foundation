@@ -61,9 +61,9 @@
     [self calculateInfoViewOffset];
     
     // Set up actions
-    [self.scrubberSlider addTarget:self action:@selector(showPopupUI) forControlEvents:UIControlEventValueChanged];
-    [self.scrubberSlider addTarget:self action:@selector(hidePopupUI) forControlEvents:UIControlEventTouchUpInside];
-    [self.scrubberSlider addTarget:self action:@selector(unhidePopupUI) forControlEvents:UIControlEventTouchDown];
+    [self.scrubberSlider addTarget:self action:@selector(showPopupUI) forControlEvents:UIControlEventValueChanged]; //滑动修改值
+    [self.scrubberSlider addTarget:self action:@selector(hidePopupUI) forControlEvents:UIControlEventTouchUpInside]; //松开
+    [self.scrubberSlider addTarget:self action:@selector(unhidePopupUI) forControlEvents:UIControlEventTouchDown]; //按下
 
     self.filmStripView.layer.shadowOffset = CGSizeMake(0, 2);
     self.filmStripView.layer.shadowColor = [UIColor darkGrayColor].CGColor;
@@ -97,6 +97,7 @@
     self.infoViewOffset = ceilf(CGRectGetWidth(self.infoView.frame) / 2);
 }
 
+//跳转到字慕选择页
 - (IBAction)showSubtitles:(id)sender {
     [self.timer invalidate];
     [self.delegate pause];
@@ -107,6 +108,7 @@
     [self.window.rootViewController.presentedViewController presentViewController:self.controller animated:YES completion:nil];
 }
 
+//保存选中语言种类
 - (void)subtitleSelected:(NSString *)subtitle {
     self.selectedSubtitle = subtitle;
     [self.delegate subtitleSelected:subtitle];
@@ -126,6 +128,7 @@
     }
     _subtitles = filtered;
     if (_subtitles && _subtitles.count > 1) {
+        //重新添加一个 切换语言的按钮
         NSMutableArray *items = [NSMutableArray arrayWithArray:self.toolbar.items];
         UIImage *image = [UIImage imageNamed:@"subtitles"];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:image
@@ -230,9 +233,13 @@
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+//    MARK: Slider UI
+
 - (void)showPopupUI {
     self.infoView.hidden = NO;
     CGRect trackRect = [self.scrubberSlider convertRect:self.scrubberSlider.bounds toView:nil];
+    //转换thumImageView 在 Slider中位置 （通过slider ）
     CGRect thumbRect = [self.scrubberSlider thumbRectForBounds:self.scrubberSlider.bounds trackRect:trackRect value:self.scrubberSlider.value];
 
     CGRect rect = self.infoView.frame;
@@ -242,12 +249,13 @@
 
     self.currentTimeLabel.text = @"-- : --";
 	self.remainingTimeLabel.text = @"-- : --";
-    
+    NSLog(@"scrubbedToTime");
     [self setScrubbingTime:self.scrubberSlider.value];
     [self.delegate scrubbedToTime:self.scrubberSlider.value];
 }
 
 - (void)unhidePopupUI {
+    NSLog(@"scrubbingDidStart");
     self.infoView.hidden = NO;
     self.infoView.alpha = 0.0f;
     [UIView animateWithDuration:0.2f animations:^{
@@ -256,9 +264,12 @@
     self.scrubbing = YES;
     [self resetTimer];
     [self.delegate scrubbingDidStart];
-}
+} 
 
+
+//结束
 - (void)hidePopupUI {
+    NSLog(@"scrubbingDidEnd");
     [UIView animateWithDuration:0.3f animations:^{
         self.infoView.alpha = 0.0f;
     } completion:^(BOOL complete) {
@@ -286,6 +297,7 @@
 - (void)resetTimer {
     [self.timer invalidate];
     if (!self.scrubbing) {
+        //5秒之后 隐藏上下导航栏
         self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0 firing:^{
             if (self.timer.isValid && !self.controlsHidden) {
                 [self toggleControls:nil];
@@ -296,6 +308,12 @@
 
 - (void)setTitle:(NSString *)title {
     self.navigationBar.topItem.title = title ? title : @"Video Player";
+}
+
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    self.toolbar.frame = CGRectMake(self.toolbar.frame.origin.x, self.toolbar.frame.origin.y-14, self.toolbar.frame.size.width, self.toolbar.frame.size.height+14);
 }
 
 @end

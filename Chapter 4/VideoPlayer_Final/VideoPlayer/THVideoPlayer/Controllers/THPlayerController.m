@@ -79,7 +79,7 @@ static const NSString *PlayerItemStatusContext;
         @"commonMetadata",
         @"availableMediaCharacteristicsWithMediaSelectionOptions"
     ];
-    //PlayerItem 自动加载AVAsset中属性值（通过keys 数组）
+    //PlayerItem 自动加载AVAsset中属性值（通过keys 数组）iOS 7 改进后提供的
     self.playerItem = [AVPlayerItem playerItemWithAsset:self.asset          // 2
                            automaticallyLoadedAssetKeys:keys];
 
@@ -108,7 +108,7 @@ static const NSString *PlayerItemStatusContext;
             
             if (self.playerItem.status == AVPlayerItemStatusReadyToPlay) {
                 
-                // Set up time observers.                                   // 2
+                // Set up time observers.      添加时间播放器时间监听                             // 2
                 [self addPlayerItemTimeObserver];
                 [self addItemEndObserverForPlayerItem];
                 //获取时长
@@ -123,8 +123,8 @@ static const NSString *PlayerItemStatusContext;
                 
                 [self.player play];                                         // 5
                 
-                [self loadMediaOptions];
-                [self generateThumbnails];
+                [self loadMediaOptions]; //
+                [self generateThumbnails]; //创建视频片段
                 
             } else {
                 [UIAlertView showAlertWithTitle:@"Error"
@@ -134,14 +134,16 @@ static const NSString *PlayerItemStatusContext;
     }
 }
 
+//加载视频中包含备用媒体呈现方式 备用音频，视频或文本轨道 例如字慕
 - (void)loadMediaOptions {
-    NSString *mc = AVMediaCharacteristicLegible;                            // 1
+    NSString *mc = AVMediaCharacteristicLegible;  //字幕或隐藏式字幕                          // 1
     AVMediaSelectionGroup *group =
         [self.asset mediaSelectionGroupForMediaCharacteristic:mc];          // 2
     if (group) {
         NSMutableArray *subtitles = [NSMutableArray array];                 // 3
         for (AVMediaSelectionOption *option in group.options) {
             [subtitles addObject:option.displayName];
+            NSLog(@"dispalay name == %@",option.displayName);
         }
         [self.transport setSubtitles:subtitles];                            // 4
     } else {
@@ -149,6 +151,7 @@ static const NSString *PlayerItemStatusContext;
     }
 }
 
+//设置选好的 字慕
 - (void)subtitleSelected:(NSString *)subtitle {
     NSString *mc = AVMediaCharacteristicLegible;
     AVMediaSelectionGroup *group =
@@ -187,17 +190,19 @@ static const NSString *PlayerItemStatusContext;
         [weakSelf.transport setCurrentTime:currentTime duration:duration];  // 4
     };
     
-    // Add observer and store pointer for future use
+    // Add observer and store pointer for future use  添加周期性的监听方法（AVPlayer）
     self.timeObserver =                                                     // 5
         [self.player addPeriodicTimeObserverForInterval:interval
                                                   queue:queue
                                              usingBlock:callback];
 }
 
+//播放条目结束监听
 - (void)addItemEndObserverForPlayerItem {
 
     NSString *name = AVPlayerItemDidPlayToEndTimeNotification;
 
+    //通过主队列 监听播放条目是否执行完成
     NSOperationQueue *queue = [NSOperationQueue mainQueue];
 
     __weak THPlayerController *weakSelf = self;                             // 1
@@ -236,8 +241,9 @@ static const NSString *PlayerItemStatusContext;
 }
 
 - (void)scrubbingDidStart {                                                 // 1
-    self.lastPlaybackRate = self.player.rate;
-    [self.player pause];
+    self.lastPlaybackRate = self.player.rate;//保存当前播放速率
+    [self.player pause]; //暂停播放
+    //移除时间监控
     [self.player removeTimeObserver:self.timeObserver];
     self.timeObserver = nil;
 }
@@ -247,8 +253,9 @@ static const NSString *PlayerItemStatusContext;
     [self.player seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
 }
 
-- (void)scrubbingDidEnd {                                                   // 3
-    [self addPlayerItemTimeObserver];
+- (void)scrubbingDidEnd {
+    // 3
+    [self addPlayerItemTimeObserver]; //添加时间监控
     if (self.lastPlaybackRate > 0.0f) {
         [self.player play];
     }
@@ -258,7 +265,7 @@ static const NSString *PlayerItemStatusContext;
 #pragma mark - Thumbnail Generation
 
 - (void)generateThumbnails {
-    
+    NSLog(@"🐶🐶🐶🐶%s",__func__);
     self.imageGenerator =                                                   // 1
         [AVAssetImageGenerator assetImageGeneratorWithAsset:self.asset];
     
@@ -269,7 +276,7 @@ static const NSString *PlayerItemStatusContext;
 
     NSMutableArray *times = [NSMutableArray array];                         // 3
     CMTimeValue increment = duration.value / 20;
-    CMTimeValue currentValue = 2.0 * duration.timescale;
+    CMTimeValue currentValue = 2.0 * duration.timescale; //开始时间端
     while (currentValue <= duration.value) {
         CMTime time = CMTimeMake(currentValue, duration.timescale);
         [times addObject:[NSValue valueWithCMTime:time]];
@@ -286,7 +293,7 @@ static const NSString *PlayerItemStatusContext;
                 CMTime actualTime,
                 AVAssetImageGeneratorResult result,
                 NSError *error) {
-
+        NSLog(@"======🐶 request seconds == %@  actual seconds == %@",@(CMTimeGetSeconds(requestedTime)),@(CMTimeGetSeconds(actualTime)));//循环 20次 （handler被执行 20次）
         if (result == AVAssetImageGeneratorSucceeded) {                     // 6
             UIImage *image = [UIImage imageWithCGImage:imageRef];
             id thumbnail =
@@ -296,7 +303,7 @@ static const NSString *PlayerItemStatusContext;
             NSLog(@"Error: %@", [error localizedDescription]);
         }
 
-        // If the decremented image count is at 0, we're all done.
+        // If the decremented image count is at 0, we're all done.  （图片数量一直递减，直到0时，图片生成完成 发送通知）
         if (--imageCount == 0) {                                            // 7
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSString *name = THThumbnailsGeneratedNotification;

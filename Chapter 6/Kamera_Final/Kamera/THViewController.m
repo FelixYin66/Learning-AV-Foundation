@@ -45,6 +45,7 @@
 
 @implementation THViewController
 
+//闪光灯控制
 - (IBAction)flashControlChanged:(id)sender {
     NSInteger mode = [(THFlashControl *)sender selectedMode];
     if (self.cameraMode == THCameraModePhoto) {
@@ -78,6 +79,7 @@
     
 }
 
+//更新拍照缩略图
 - (void)updateThumbnail:(NSNotification *)notification {
     UIImage *image = notification.object;
     [self.thumbnailButton setBackgroundImage:image forState:UIControlStateNormal];
@@ -85,6 +87,7 @@
     self.thumbnailButton.layer.borderWidth = 1.0f;
 }
 
+//图片选择器
 - (IBAction)showCameraRoll:(id)sender {
     UIImagePickerController *controller = [[UIImagePickerController alloc] init];
     controller.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
