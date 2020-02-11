@@ -44,13 +44,16 @@
 
 	self.controller = [[THCameraController alloc] init];
 
+    //使用GLKit 框架中OpenGLAPI 添加滤镜
 	CGRect frame = self.view.bounds;
+    //设置绘制纹理上下文 THPreviewView继承自GLKView，GLKView继承自UIView
     EAGLContext *eaglContext = [THContextManager sharedInstance].eaglContext;
     self.previewView = [[THPreviewView alloc] initWithFrame:frame context:eaglContext];
+    //设置默认滤镜
 	self.previewView.filter = [THPhotoFilters defaultFilter];
-
+    //设置代理对象
     self.controller.imageTarget = self.previewView;
-
+    //设置滤镜上下文（基于EAGLContext上下文创建得来）
 	self.previewView.coreImageContext = [THContextManager sharedInstance].ciContext;
 	[self.view insertSubview:self.previewView belowSubview:self.overlayView];
 

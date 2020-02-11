@@ -97,6 +97,7 @@
     self.rightButton.enabled = labelIndex < self.labels.count - 1;
 }
 
+//发送通知修改滤镜
 - (void)postNotificationForChange:(NSString *)displayName {
     CIFilter *filter = [THPhotoFilters filterForDisplayName:displayName];
     [[NSNotificationCenter defaultCenter] postNotificationName:THFilterSelectionChangedNotification object:filter];

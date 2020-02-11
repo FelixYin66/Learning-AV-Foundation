@@ -66,9 +66,11 @@
 }
 
 - (void)filterChanged:(NSNotification *)notification {
+    //保存修改的滤镜
     self.filter = notification.object;
 }
 
+//实时绘制预览画面
 - (void)setImage:(CIImage *)sourceImage {
 
     [self bindDrawable];

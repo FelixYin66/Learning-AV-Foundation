@@ -26,6 +26,7 @@
 #import <GLKit/GLKit.h>
 #import "THImageTarget.h"
 
+//使用OpenGL ES绘制内容的视图的默认实现。
 @interface THPreviewView : GLKView <THImageTarget>
 
 @property (strong, nonatomic) CIFilter *filter;

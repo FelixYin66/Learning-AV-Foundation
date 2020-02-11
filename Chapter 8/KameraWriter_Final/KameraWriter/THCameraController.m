@@ -51,26 +51,32 @@
     self.videoDataOutput.videoSettings = outputSettings;
     self.videoDataOutput.alwaysDiscardsLateVideoFrames = NO;                // 2
     
+    //设置视频录制时输出流代理
     [self.videoDataOutput setSampleBufferDelegate:self
                                             queue:self.dispatchQueue];
     
+    //设置视频输出流回话
     if ([self.captureSession canAddOutput:self.videoDataOutput]) {
         [self.captureSession addOutput:self.videoDataOutput];
     } else {
         return NO;
     }
     
+    //设置音频输出流代理
     self.audioDataOutput = [[AVCaptureAudioDataOutput alloc] init];         // 3
     
     [self.audioDataOutput setSampleBufferDelegate:self
                                             queue:self.dispatchQueue];
-    
+    //设置音频输出流回话
     if ([self.captureSession canAddOutput:self.audioDataOutput]) {
         [self.captureSession addOutput:self.audioDataOutput];
     } else {
         return NO;
     }
     
+    /*
+     配置音频，视频输出流写入文件的配置参数 统一使用THMovieWriter 对象去管理
+     */
     NSString *fileType = AVFileTypeQuickTimeMovie;
     
     NSDictionary *videoSettings =
@@ -110,9 +116,10 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
-    
+    //1.视频，音频写入到文件
     [self.movieWriter processSampleBuffer:sampleBuffer];
 
+    //2.通过代理回调返回实时预览画面
     if (captureOutput == self.videoDataOutput) {
         
         CVPixelBufferRef imageBuffer =
@@ -120,7 +127,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         
         CIImage *sourceImage =
             [CIImage imageWithCVPixelBuffer:imageBuffer options:nil];
-        
+        //设置滤镜实时预览画面
         [self.imageTarget setImage:sourceImage];
     }
 }

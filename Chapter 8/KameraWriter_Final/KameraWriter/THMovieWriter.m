@@ -42,14 +42,14 @@ static NSString *const THVideoFilename = @"movie.mov";
 
 @property (strong, nonatomic) dispatch_queue_t dispatchQueue;
 
-@property (weak, nonatomic) CIContext *ciContext;
-@property (nonatomic) CGColorSpaceRef colorSpace;
-@property (strong, nonatomic) CIFilter *activeFilter;
+@property (weak, nonatomic) CIContext *ciContext;//滤镜上下文
+@property (nonatomic) CGColorSpaceRef colorSpace;//色彩空间
+@property (strong, nonatomic) CIFilter *activeFilter;//使用的滤镜名
 
-@property (strong, nonatomic) NSDictionary *videoSettings;
-@property (strong, nonatomic) NSDictionary *audioSettings;
+@property (strong, nonatomic) NSDictionary *videoSettings;//录制视频配置
+@property (strong, nonatomic) NSDictionary *audioSettings;//录制音频配置
 
-@property (nonatomic) BOOL firstSample;
+@property (nonatomic) BOOL firstSample;//是否是第一个样例
 
 @end
 
@@ -61,16 +61,18 @@ static NSString *const THVideoFilename = @"movie.mov";
 
 	self = [super init];
 	if (self) {
+        //保存音视频录制配置参数及录制队列
 		_videoSettings = videoSettings;
 		_audioSettings = audioSettings;
 		_dispatchQueue = dispatchQueue;
 
+        //保存滤镜默认信息
         _ciContext = [THContextManager sharedInstance].ciContext;           // 3
 		_colorSpace = CGColorSpaceCreateDeviceRGB();
 
         _activeFilter = [THPhotoFilters defaultFilter];
         _firstSample = YES;
-
+        //添加滤镜修改通知检测
         NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];    // 4
         [nc addObserver:self
                selector:@selector(filterChanged:)
@@ -152,6 +154,7 @@ static NSString *const THVideoFilename = @"movie.mov";
     });
 }
 
+//此处添加代码可以为图片添加水印
 - (void)processSampleBuffer:(CMSampleBufferRef)sampleBuffer {
     
     if (!self.isWriting) {
@@ -189,13 +192,14 @@ static NSString *const THVideoFilename = @"movie.mov";
             NSLog(@"Unable to obtain a pixel buffer from the pool.");
             return;
         }
-
+        //获取CVPixelBufferRef 数据
         CVPixelBufferRef imageBuffer =                                      // 4
             CMSampleBufferGetImageBuffer(sampleBuffer);
 
         CIImage *sourceImage = [CIImage imageWithCVPixelBuffer:imageBuffer
                                                        options:nil];
 
+        //将滤镜效果添加到视频帧中
         [self.activeFilter setValue:sourceImage forKey:kCIInputImageKey];
 
         CIImage *filteredImage = self.activeFilter.outputImage;
@@ -208,8 +212,16 @@ static NSString *const THVideoFilename = @"movie.mov";
                toCVPixelBuffer:outputRenderBuffer
                         bounds:filteredImage.extent
                     colorSpace:self.colorSpace];
+        
+        //将水印添加到视频帧中
+        UIImage *waterImg = [UIImage imageNamed:@"panda"];
+        CIImage *renderImage = [[CIImage alloc] initWithImage:waterImg];
+        [self.ciContext render:renderImage                                // 5
+        toCVPixelBuffer:outputRenderBuffer
+                 bounds:filteredImage.extent
+             colorSpace:self.colorSpace];
 
-
+        //将视频帧写入视频文件
         if (self.assetWriterVideoInput.readyForMoreMediaData) {             // 6
             if (![self.assetWriterInputPixelBufferAdaptor
                             appendPixelBuffer:outputRenderBuffer
